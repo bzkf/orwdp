@@ -13,6 +13,13 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+      packages: write
+      pull-requests: write
+      actions: read
+      security-events: write
     steps:
     - uses: actions/checkout@v3
 
@@ -43,6 +50,13 @@ jobs:
     if: ${{ startsWith(github.ref, 'refs/tags/v') }}
     needs: test
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+      packages: write
+      pull-requests: write
+      actions: read
+      security-events: write
     steps:
     - uses: actions/checkout@v3
 
