@@ -1,18 +1,14 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { single } from 'rxjs';
 import { AttributeFilter } from 'src/app/model/FeasibilityQuery/Criterion/AttributeFilter/AttributeFilter';
-import { Criterion } from 'src/app/model/FeasibilityQuery/Criterion/Criterion';
-import { Query } from 'src/app/model/FeasibilityQuery/Query';
-import { TimeRestriction } from 'src/app/model/FeasibilityQuery/TimeRestriction';
-import { FilterTypes } from 'src/app/model/FilterTypes';
-import { TerminologyCode, TerminologyEntry } from 'src/app/model/terminology/Terminology';
-import { UIProfile } from 'src/app/model/terminology/UIProfile';
-import {
-  CritGroupArranger,
-  CritGroupPosition,
-} from 'src/app/modules/querybuilder/controller/CritGroupArranger';
-import { QueryProviderService } from 'src/app/modules/querybuilder/service/query-provider.service';
+import { Component, Input, OnInit } from '@angular/core';
 import { CreateCriterionService } from 'src/app/service/CriterionService/CreateCriterion.service';
+import { Criterion } from 'src/app/model/FeasibilityQuery/Criterion/Criterion';
+import { FilterTypes } from 'src/app/model/FilterTypes';
+import { Query } from 'src/app/model/FeasibilityQuery/Query';
+import { QueryProviderService } from 'src/app/modules/querybuilder/service/query-provider.service';
+import { TerminologyCode } from 'src/app/model/terminology/Terminology';
+import { TimeRestriction } from 'src/app/model/FeasibilityQuery/TimeRestriction';
+import { CritGroupArranger } from 'src/app/modules/querybuilder/controller/CritGroupArranger';
+import { QueryService } from 'src/app/service/QueryService.service';
 
 @Component({
   selector: 'num-edit-reference',
@@ -38,7 +34,7 @@ export class EditReferenceComponent implements OnInit {
 
   constructor(
     private createCriterionService: CreateCriterionService,
-    public provider: QueryProviderService
+    public queryService: QueryService
   ) {}
 
   ngOnInit() {
@@ -137,12 +133,33 @@ export class EditReferenceComponent implements OnInit {
       if (criteria.isLinked && criteria.uniqueID === singleReferenceCriterion.uniqueID) {
         criteria.isLinked = false;
         this.criterion.linkedCriteria.splice(index, 1);
-        this.deselectAndRemoveConceptForCriterion(singleReferenceCriterion.context);
+        console.log(singleReferenceCriterion);
+        this.deselectAndRemoveConceptFromCriterion(singleReferenceCriterion.context);
       }
     });
+    this.deleteCriterionFromQuery(singleReferenceCriterion);
   }
 
-  deselectAndRemoveConceptForCriterion(referenceAttributeTermCode: TerminologyCode) {
+  /**
+   * delete the criterion from the query and also the empty resukting group
+   *
+   * @param singleReferenceCriterion
+   */
+  deleteCriterionFromQuery(singleReferenceCriterion: Criterion): void {
+    for (const inex of ['inclusion', 'exclusion']) {
+      const criteriaKey = `${inex}Criteria` as 'inclusionCriteria' | 'exclusionCriteria';
+
+      // Filter out the criteria matching the uniqueID and remove empty andGroups
+      this.query.groups[0][criteriaKey] = this.query.groups[0][criteriaKey]
+        .map((andGroup: Criterion[]) => andGroup.filter(
+            (criterion: Criterion) => criterion.uniqueID !== singleReferenceCriterion.uniqueID
+          ))
+        .filter((andGroup: Criterion[]) => andGroup.length > 0);
+    }
+    this.queryService.setFeasibilityQuery(this.query);
+  }
+
+  deselectAndRemoveConceptFromCriterion(referenceAttributeTermCode: TerminologyCode) {
     this.criterion.attributeFilters.forEach((attributeFilter) => {
       if (
         attributeFilter.type === FilterTypes.REFERENCE &&
