@@ -120,7 +120,8 @@ export class EditReferenceComponent implements OnInit {
     this.criterion.attributeFilters.forEach((attribureFilter) => {
       if (
         attribureFilter.type === FilterTypes.REFERENCE &&
-        attribureFilter.attributeCode.display === referenceAttributeTermCode.display
+        attribureFilter.attributeDefinition.singleReference?.context.display ===
+          referenceAttributeTermCode.display
       ) {
         attribureFilter.selectedConcepts.push(referenceAttributeTermCode);
       }
@@ -133,7 +134,6 @@ export class EditReferenceComponent implements OnInit {
       if (criteria.isLinked && criteria.uniqueID === singleReferenceCriterion.uniqueID) {
         criteria.isLinked = false;
         this.criterion.linkedCriteria.splice(index, 1);
-        console.log(singleReferenceCriterion);
         this.deselectAndRemoveConceptFromCriterion(singleReferenceCriterion.context);
       }
     });
@@ -151,9 +151,11 @@ export class EditReferenceComponent implements OnInit {
 
       // Filter out the criteria matching the uniqueID and remove empty andGroups
       this.query.groups[0][criteriaKey] = this.query.groups[0][criteriaKey]
-        .map((andGroup: Criterion[]) => andGroup.filter(
+        .map((andGroup: Criterion[]) =>
+          andGroup.filter(
             (criterion: Criterion) => criterion.uniqueID !== singleReferenceCriterion.uniqueID
-          ))
+          )
+        )
         .filter((andGroup: Criterion[]) => andGroup.length > 0);
     }
     this.queryService.setFeasibilityQuery(this.query);
