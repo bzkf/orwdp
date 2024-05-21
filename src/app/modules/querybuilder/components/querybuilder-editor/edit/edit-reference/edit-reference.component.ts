@@ -113,17 +113,45 @@ export class EditReferenceComponent implements OnInit {
     singleReferenceCriterion.entity = true;
     this.criterion.linkedCriteria.push(singleReferenceCriterion);
     this.query.groups[0].inclusionCriteria.push([singleReferenceCriterion]);
-    this.setSelectableConceptsForCriterion(singleReferenceCriterion.context);
+    console.log(singleReferenceCriterion);
+    this.setSelectableConceptsForCriterion(singleReferenceCriterion);
   }
 
-  setSelectableConceptsForCriterion(referenceAttributeTermCode: TerminologyCode) {
+  setSelectableConceptsForCriterion(referenceAttributeTermCode: Criterion) {
+    console.log(referenceAttributeTermCode);
+    console.log(this.criterion.attributeFilters);
     this.criterion.attributeFilters.forEach((attribureFilter) => {
-      if (
-        attribureFilter.type === FilterTypes.REFERENCE &&
-        attribureFilter.attributeDefinition.singleReference?.context.display ===
-          referenceAttributeTermCode.display
-      ) {
-        attribureFilter.selectedConcepts.push(referenceAttributeTermCode);
+      if (attribureFilter.type === FilterTypes.REFERENCE) {
+        if (
+          attribureFilter.attributeDefinition.singleReference?.context.display ===
+            referenceAttributeTermCode.context.display &&
+          attribureFilter.attributeDefinition.referencedOnlyOnce
+        ) {
+          attribureFilter.selectedConcepts.push(referenceAttributeTermCode.context);
+        } else {
+          attribureFilter.attributeDefinition.selectableConcepts.forEach((selectableConcept) => {
+            if (selectableConcept.uid === referenceAttributeTermCode.uniqueID) {
+              attribureFilter.selectedConcepts.push(referenceAttributeTermCode.context);
+            }
+          });
+        }
+      }
+    });
+    this.moveReferenceCriteria();
+  }
+
+  setSelectableConceptsForCriterion2(referenceAttributeTermCode: TerminologyCode) {
+    console.log(referenceAttributeTermCode);
+    console.log(this.criterion.attributeFilters);
+    this.criterion.attributeFilters.forEach((attribureFilter) => {
+      if (attribureFilter.type === FilterTypes.REFERENCE) {
+        if (
+          attribureFilter.attributeDefinition.singleReference?.context.display ===
+            referenceAttributeTermCode.display &&
+          attribureFilter.attributeDefinition.referencedOnlyOnce
+        ) {
+          attribureFilter.selectedConcepts.push(referenceAttributeTermCode);
+        }
       }
     });
     this.moveReferenceCriteria();
