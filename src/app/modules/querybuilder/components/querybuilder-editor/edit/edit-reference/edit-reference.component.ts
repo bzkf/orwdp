@@ -118,8 +118,6 @@ export class EditReferenceComponent implements OnInit {
   }
 
   setSelectableConceptsForCriterion(referenceAttributeTermCode: Criterion) {
-    console.log(referenceAttributeTermCode);
-    console.log(this.criterion.attributeFilters);
     this.criterion.attributeFilters.forEach((attribureFilter) => {
       if (attribureFilter.type === FilterTypes.REFERENCE) {
         if (
@@ -134,23 +132,6 @@ export class EditReferenceComponent implements OnInit {
               attribureFilter.selectedConcepts.push(referenceAttributeTermCode.context);
             }
           });
-        }
-      }
-    });
-    this.moveReferenceCriteria();
-  }
-
-  setSelectableConceptsForCriterion2(referenceAttributeTermCode: TerminologyCode) {
-    console.log(referenceAttributeTermCode);
-    console.log(this.criterion.attributeFilters);
-    this.criterion.attributeFilters.forEach((attribureFilter) => {
-      if (attribureFilter.type === FilterTypes.REFERENCE) {
-        if (
-          attribureFilter.attributeDefinition.singleReference?.context.display ===
-            referenceAttributeTermCode.display &&
-          attribureFilter.attributeDefinition.referencedOnlyOnce
-        ) {
-          attribureFilter.selectedConcepts.push(referenceAttributeTermCode);
         }
       }
     });
