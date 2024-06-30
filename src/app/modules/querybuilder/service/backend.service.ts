@@ -100,6 +100,17 @@ export class BackendService {
   public postQuery(query: Query): Observable<any> {
     if (this.feature.getQueryVersion() === 'v2') {
       const queryV2 = this.apiTranslator.translateToStructuredQuery(query);
+      if (this.feature.mockResult()) {
+        return of({
+          headers: {
+            location: 'http://test',
+            // eslint-disable-next-line prefer-arrow/prefer-arrow-functions
+            get() {
+              return location;
+            },
+          },
+        });
+      }
       return this.http.post<QueryResponse>(this.createUrl(BackendService.PATH_RUN_QUERY), queryV2, {
         observe: 'response',
       });
@@ -109,7 +120,7 @@ export class BackendService {
   public getSummaryResult(resultUrl: string): Observable<QueryResult> {
     if (this.feature.mockResult()) {
       const result = {
-        totalNumberOfPatients: Math.floor(Math.random() * 10000000),
+        totalNumberOfPatients: Math.floor(Math.random() * 10000),
         queryId: '12345',
         resultLines: [],
       };
@@ -126,12 +137,12 @@ export class BackendService {
   ): Observable<QueryResult> {
     if (this.feature.mockResult()) {
       const mockResult = {
-        totalNumberOfPatients: Math.floor(Math.random() * 10000000),
+        totalNumberOfPatients: Math.floor(Math.random() * 10000),
         queryId: '12345',
         resultLines: [
           { siteName: 'Standort 1', numberOfPatients: 351 },
           { siteName: 'Standort 2', numberOfPatients: 1277 },
-          { siteName: 'Standort 3', numberOfPatients: 63000000 },
+          { siteName: 'Standort 3', numberOfPatients: 630 },
           { siteName: 'Standort 4', numberOfPatients: 0 },
         ],
       };
