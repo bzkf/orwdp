@@ -33,14 +33,14 @@
       "PARAGRAPH5_3": ""
     },
     "FDPGTHEME": {
-      "HEADLINE": "Welcome to the BZKF Feasibility Platform!",
-      "PARAGRAPH1": "The BZKF Feasibility Plattform offers support to researchers who want to perform research projects.",
-      "PARAGRAPH2": "Through a feasibility request,  researchers can learn more about a theoretical cohort. Using inclusion and exclusion criteria, researchers obtain a number of existing patients in all six BZKF sites. Data access can be applied for if a research idea is feasible.",
+      "HEADLINE": "Welcome to the „Find data and biospecimens“ service of the German Research Data Portal for Health",
+      "PARAGRAPH1": "This is a support service for scientists to assist you in realizing your research project. By submitting a feasibility request, you can find out how many data sets for your search criteria are available at university hospitals nationwide. Based on inclusion and exclusion criteria, the availability of health data for medical research purposes can be estimated.",
+      "PARAGRAPH2": "",
       "PARAGRAPH3_1": "With ",
       "PARAGRAPH3_2": "New Query",
       "PARAGRAPH3_3": " you have the possibility to formulate and send a new query based on the ",
       "PARAGRAPH3_4": " to get an overview of the available patient data records.",
-      "PARAGRAPH3_LINK": "oncologic data across Bavaria",
+      "PARAGRAPH3_LINK": "core data set of the MII",
       "PARAGRAPH4_1":"You can view and further edit saved queries or saved drafts via ",
       "PARAGRAPH4_2":"My Queries",
       "PARAGRAPH4_3": ".",
