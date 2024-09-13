@@ -43,8 +43,8 @@
   },
   "mock": {
     "terminology": false,
-    "query": false,
-    "result": false,
+    "query": true,
+    "result": true,
     "loadnsave": false
   },
   "stylesheet": "FDPGTheme",
