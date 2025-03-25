@@ -62,7 +62,7 @@ $mat-light-theme-fdpg-background: mat-light-theme-background(
 @function num-theme-builder($theme) {
   @if ($theme == 'fdpg') {
     @return (
-      name: 'fdpg',
+      name: 'oRWDP',
       primary: $num-portal-webapp-primary-fdpg,
       accent: $num-portal-webapp-accent-fdpg,
       warn: $num-portal-webapp-additional,
